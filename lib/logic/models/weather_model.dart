@@ -1,4 +1,3 @@
-// ignore_for_file: non_constant_identifier_names
 class WeatherModel {
   WeatherModel.fromMap(Map<String, dynamic> json)
       : temp = json['main']['temp'].toString(),
