@@ -15,6 +15,11 @@ class MainApp extends StatelessWidget {
       title: 'Simpler Weather App',
       theme: ThemeData(
         primarySwatch: Colors.green,
+        textTheme: const TextTheme(
+          bodySmall: TextStyle(color: Colors.white),
+          bodyLarge: TextStyle(color: Colors.white),
+          bodyMedium: TextStyle(color: Colors.white),
+        ),
       ),
       home: const WeatherPage(),
     );
