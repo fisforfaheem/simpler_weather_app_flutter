@@ -20,7 +20,7 @@ class CallToApi {
         //     currentPosition.latitude, currentPosition.longitude);
 
         // Placemark place = placemarks[0];
-        cityName = 'London';
+        cityName = 'Rawalpindi';
       }
 
       var url = Uri.https('api.openweathermap.org', '/data/2.5/weather',

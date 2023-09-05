@@ -2,6 +2,7 @@ import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:simpler_weather_app_flutter/constants/call.dart';
 import 'package:simpler_weather_app_flutter/logic/models/weather_model.dart';
+import 'package:simpler_weather_app_flutter/view/error_screen.dart';
 
 class WeatherPage extends StatefulWidget {
   const WeatherPage({Key? key}) : super(key: key);
@@ -13,13 +14,12 @@ class WeatherPage extends StatefulWidget {
 class _WeatherPageState extends State<WeatherPage> {
   TextEditingController textController = TextEditingController();
 
-  Future<WeatherModel>? _myData;
+  late Future<WeatherModel> _myData;
   @override
   void initState() {
     setState(() {
-      _myData = getData(true, "");
+      _myData = getData(true, "Rawalpindi");
     });
-
     super.initState();
   }
 
@@ -27,18 +27,15 @@ class _WeatherPageState extends State<WeatherPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.black,
         body: FutureBuilder(
           future: _myData,
           builder: (ctx, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               //if data has any errors
               if (snapshot.hasError) {
-                return Center(
-                  child: Text(
-                    '${snapshot.error.toString()} ERROR OCCURED',
-                    style: const TextStyle(fontSize: 18),
-                  ),
+                return ErrorScreen(
+                  errorMessage: snapshot.error.toString(),
                 );
               }
               //if there is some data recieved
@@ -80,7 +77,7 @@ class _WeatherPageState extends State<WeatherPage> {
                             ),
                             onSuffixTap: () async {
                               textController.text == ''
-                                  ? print("No city entered")
+                                  ? debugPrint("No city entered")
                                   : setState(() {
                                       _myData =
                                           getData(false, textController.text);
@@ -89,7 +86,7 @@ class _WeatherPageState extends State<WeatherPage> {
                               textController.clear();
                             },
                             onSubmitted: (value) {
-                              print('User submitted: $value');
+                              debugPrint('User submitted: $value');
                             },
                             style: const TextStyle(
                                 fontSize: 14,
@@ -137,7 +134,16 @@ class _WeatherPageState extends State<WeatherPage> {
                   ),
                 );
               } else if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(
+                  child: SizedBox(
+                    width: 100,
+                    height: 100,
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 10,
+                    ),
+                  ),
+                );
               } else {
                 return Center(
                   child: Text("State ${snapshot.connectionState}"),
@@ -145,7 +151,14 @@ class _WeatherPageState extends State<WeatherPage> {
               }
             }
             return const Center(
-              child: Text("Server Timed out"),
+              child: SizedBox(
+                width: 100,
+                height: 100,
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                  strokeWidth: 10,
+                ),
+              ),
             );
           },
         ));

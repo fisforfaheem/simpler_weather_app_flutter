@@ -14,6 +14,7 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Simpler Weather App',
       theme: ThemeData(
+        useMaterial3: true,
         primarySwatch: Colors.green,
         textTheme: const TextTheme(
           bodySmall: TextStyle(color: Colors.white),
