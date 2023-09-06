@@ -25,8 +25,9 @@ class _WeatherPageState extends State<WeatherPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        resizeToAvoidBottomInset: false,
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
         backgroundColor: Colors.black,
         body: FutureBuilder(
           future: _myData,
@@ -62,75 +63,74 @@ class _WeatherPageState extends State<WeatherPage> {
                   ),
                   height: double.infinity,
                   width: double.infinity,
-                  child: SafeArea(
-                    child: Column(
-                      children: [
-                        AnimSearchBar(
-                            rtl: true,
-                            width: 400,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 25),
+                          const Icon(
+                            Icons.location_on_rounded,
                             color: Colors.white,
-                            textController: textController,
-                            suffixIcon: const Icon(
-                              Icons.search,
-                              color: Colors.black,
-                              size: 26,
-                            ),
-                            onSuffixTap: () async {
-                              textController.text == ''
-                                  ? debugPrint("No city entered")
-                                  : setState(() {
-                                      _myData =
-                                          getData(false, textController.text);
-                                    });
-                              FocusScope.of(context).unfocus();
-                              textController.clear();
-                            },
-                            onSubmitted: (value) {
-                              debugPrint('User submitted: $value');
-                            },
+                          ),
+                          Text(
+                            data.city,
                             style: const TextStyle(
-                                fontSize: 14,
+                                fontSize: 20,
                                 fontFamily: 'Poppins',
-                                color: Colors.black,
-                                letterSpacing: 2)),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const SizedBox(height: 25),
-                            const Icon(
-                              Icons.location_on_rounded,
-                              color: Colors.white,
-                            ),
-                            Text(
-                              data.city,
-                              style: const TextStyle(
-                                  fontSize: 20,
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(height: 25),
-                            Text(
-                              data.desc,
-                              style: const TextStyle(
-                                  fontSize: 42,
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(height: 25),
-                            Text(
-                              "${data.temp}°C",
-                              style: const TextStyle(
-                                  fontSize: 42,
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 25),
+                          Text(
+                            data.desc,
+                            style: const TextStyle(
+                                fontSize: 42,
+                                fontFamily: 'Poppins',
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 25),
+                          Text(
+                            "${data.temp}°C",
+                            style: const TextStyle(
+                                fontSize: 42,
+                                fontFamily: 'Poppins',
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      AnimSearchBar(
+                          rtl: true,
+                          width: 400,
+                          color: Colors.white,
+                          textController: textController,
+                          suffixIcon: const Icon(
+                            Icons.search,
+                            color: Colors.black,
+                            size: 26,
+                          ),
+                          onSuffixTap: () async {
+                            textController.text == ''
+                                ? debugPrint("No city entered")
+                                : setState(() {
+                                    _myData =
+                                        getData(false, textController.text);
+                                  });
+                            FocusScope.of(context).unfocus();
+                            textController.clear();
+                          },
+                          onSubmitted: (value) {
+                            debugPrint('User submitted: $value');
+                          },
+                          style: const TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'Poppins',
+                              color: Colors.black,
+                              letterSpacing: 2)),
+                    ],
                   ),
                 );
               } else if (snapshot.connectionState == ConnectionState.waiting) {
@@ -154,14 +154,24 @@ class _WeatherPageState extends State<WeatherPage> {
               child: SizedBox(
                 width: 100,
                 height: 100,
-                child: CircularProgressIndicator(
-                  color: Colors.white,
-                  strokeWidth: 10,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text("Loading.."),
+                    ),
+                    CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 10,
+                    ),
+                  ],
                 ),
               ),
             );
           },
-        ));
+        ),
+      ),
+    );
   }
 }
 
